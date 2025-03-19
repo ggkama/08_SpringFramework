@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+			<typeAlias type="com.kh.spring.member.model.dto.MemberDTO" alias="memberDTO"/>
+	</typeAliases>
+		
+		
+	<!-- 
+			environment, dataSource => DB연결정보 
+			
+			객체를 생성해야함!
+
+	-->
+	
+	<mappers>
+			<mapper resource="/mapper/member-mapper.xml"/>
+	</mappers>
+
+</configuration>

@@ -24,12 +24,14 @@ public interface BoardMapper {
 	
 	List<ReplyDTO> selectReply(int boardNo);
 	
-	BoardDTO select
+	
+	BoardDTO selectBoardAndReply(int boardNo);
 	
 	// -------- 여기까지 1절
 	
 	int updateBoard(BoardDTO board);
 	
 	int delectBoard(int boardNo);
+
 	
 }

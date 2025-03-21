@@ -49,7 +49,7 @@
 		
 		<!-- 1절하기 -->
 		<select id="selectBoard" 
-						parameterType="int" 
+						parameterType="_int" 
 						resultType="com.kh.spring.board.model.dto.BoardDTO">
 			<include refid="boardColumn" />
 					, BOARD_CONTENT boardContent 
@@ -85,14 +85,20 @@
 	  </select>
 	  
 	  <resultMap id="boardResultSet" 
-	  					 type="com.kh.spring.board.model.dto.BoardDto">
+	  					 type="com.kh.spring.board.model.dto.BoardDTO">
 	  		<id column="boardNo" property="boardNo" />
 	  			<result column="boardTitle" property="boardTitle"/>
 	  			<result column="boardContent" property="boardContent"/>
 	  			<result column="boardWriter" property="boardWriter"/>
 	  			<result column="boardCreateDate" property="createDate"/>
 	  			<result column="changeName" property="changeName"/>
-	  			
+	  			<collection property="replyList" ofType="com.kh.spring.reply.model.dto.ReplyDTO">
+	  				<id column="replyNo" property="replyNo" />
+	  				<result column="replyWriter" property="replyWriter"/>
+	  				<result column="replyContent" property="replyContent"/>
+	  				<result column="refBoardNo" property="refBoardNo"/>
+	  				<result column="replyCreateDate" property="createDate"/>
+	  			</collection>
 	  			
 	  </resultMap>
 	  
@@ -115,7 +121,7 @@
 				TB_REPLY.CREATE_DATE replyCreateDate
 		FROM
 				TB_SPRING_BOARD 
-		JOIN 
+		LEFT JOIN 
 				TB_REPLY ON (BOARD_NO = REF_BOARD_NO) 
 		WHERE 
 				BOARD_NO = #{boardNo}

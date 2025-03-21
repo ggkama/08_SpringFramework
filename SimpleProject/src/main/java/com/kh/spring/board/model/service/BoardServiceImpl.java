@@ -116,20 +116,21 @@ public class BoardServiceImpl implements BoardService{
 	public BoardDTO selectBoard(int boardNo) {
 		
 		// 1절
-		BoardDTO board = boardMapper.selectBoard(boardNo);
+		// BoardDTO board = boardMapper.selectBoard(boardNo);
 		
+		BoardDTO board = boardMapper.selectBoardAndReply(boardNo);
 		if(board == null) {
 			throw new InvalidParameterException("존재하지 않는 게시글입니다.");
 		}
 		
+		return board;
 		// 2절
-		List<ReplyDTO> replyList = boardMapper.selectReply(boardNo);
-		board.setReplyList(replyList);
+		// <ReplyDTO> replyList = boardMapper.selectReply(boardNo);
+		// board.setReplyList(replyList);
 		// 3절
 		
 		
 		
-		return board;
 	}
 
 	@Override

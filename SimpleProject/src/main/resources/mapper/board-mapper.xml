@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.spring.board.model.mapper.BoardMapper">
+
+		<insert id="insertBoard"
+						parameterType="com.kh.spring.board.model.dto.BoardDTO">
+				
+				INSERT
+					INTO 
+							TB_SPRING_BOARD
+							(
+								BOARD_TITLE, 
+								BOARD_CONTENT, 
+								BOARD_WRITER, 
+								CHANGE_NAME
+								)
+				VALUES  
+							(
+							#{boardTitle}, 
+							#{boardContent}, 
+							#{boardWriter}, 
+							#{changeName}
+							)
+		</insert>
+		
+		<sql id="boardColumn">
+		SELECT
+								BOARD_NO boardNo, 
+								BOARD_TITLE boardTitle, 
+								BOARD_WRITER boardWriter, 
+								COUNT, 
+								TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') as createDate, 
+								CHANGE_NAME changeName
+		</sql>
+		
+		<select id="selectBoardList" 
+						resultType="com.kh.spring.board.model.dto.BoardDTO">
+					<include refid="boardColumn" />
+					FROM
+								TB_SPRING_BOARD 
+					WHERE 
+								STATUS = 'Y'
+					ORDER 
+						BY
+								createDate DESC
+													
+		</select>
+		
+		<!-- 1절하기 -->
+		<select id="selectBoard" 
+						parameterType="int" 
+						resultType="com.kh.spring.board.model.dto.BoardDTO">
+			<include refid="boardColumn" />
+					, BOARD_CONTENT boardContent 
+			FROM 
+						TB_SPRING_BOARD 
+			WHERE 
+						STATUS = 'Y' 
+			AND 
+						BOARD_NO = #{boardNo}
+						
+						
+		</select>
+		
+		<!-- 2절하기 -->
+		<select id="selectReply" 
+						parameterType="_int" 
+						resultType="com.kh.spring.reply.model.dto.ReplyDTO">
+		
+				SELECT 
+							REPLY_NO replyNo, 
+							REPLY_WRITER replyWriter, 
+							REPLY_CONTENT replyContent, 
+							CREATE_DATE createDate, 
+							REF_BOARD_NO refBoardNo 
+			 FROM 
+			 				TB_REPLY 
+			 WHERE 
+			 				REF_BOARD_NO = #{boardNo} 
+			 ORDER 
+			 		BY 
+			 				replyNo DESC
+						
+	  </select>
+	  
+	  <resultMap id="boardResultSet" 
+	  					 type="com.kh.spring.board.model.dto.BoardDto">
+	  		<id column="boardNo" property="boardNo" />
+	  			<result column="boardTitle" property="boardTitle"/>
+	  			<result column="boardContent" property="boardContent"/>
+	  			<result column="boardWriter" property="boardWriter"/>
+	  			<result column="boardCreateDate" property="createDate"/>
+	  			<result column="changeName" property="changeName"/>
+	  			
+	  			
+	  </resultMap>
+	  
+	  
+	  <select 
+	  				id="selectBoardAndReply" 
+	  				parameterType="_int" 
+	  				resultMap="boardResultSet">
+	  SELECT 
+				BOARD_NO boardNo, 
+				BOARD_TITLE boardTitle, 
+				BOARD_CONTENT boardContent, 
+				BOARD_WRITER boardWriter, 
+				TB_SPRING_BOARD.CREATE_DATE boardCreateDate , 
+				CHANGE_NAME changeName, 
+				REPLY_NO replyNo, 
+				REPLY_WRITER replyWriter, 
+				REPLY_CONTENT replyContent, 
+				REF_BOARD_NO refBoardNo, 
+				TB_REPLY.CREATE_DATE replyCreateDate
+		FROM
+				TB_SPRING_BOARD 
+		JOIN 
+				TB_REPLY ON (BOARD_NO = REF_BOARD_NO) 
+		WHERE 
+				BOARD_NO = #{boardNo}
+	  
+	  
+	  </select>
+	  
+		
+	
+</mapper>

@@ -17,7 +17,7 @@ public interface MemberService { // <- 계약서느낌
 	
 	// 회원정보수정
 	//int update(MemberDTO member, HttpSession session);
-	MemberDTO update(MemberDTO member);
+	void update(MemberDTO member, HttpSession session);
 	
 	// 회원탈퇴
 	int delete(MemberDTO member);
